@@ -1,0 +1,43 @@
+byte esquerda = 5;
+byte direita = 11;
+int entra=0;
+unsigned long tempo=0;
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(esquerda,INPUT);
+  pinMode(direita,INPUT);
+  Serial.begin(9600);
+}
+
+bool read_pin(int t, byte sensor)
+{
+  delay(t);
+  return digitalRead(sensor);
+}
+
+void le_oposto(byte sensor, bool direcao){
+  while ((millis() - tempo) < 2990){
+    if (digitalRead(sensor) && direcao){
+      entra++;
+      delay(2990);
+      Serial.println(entra);
+    }
+    else if (digitalRead(sensor) && !direcao) {
+      entra--;
+      delay(2990);
+      Serial.println(entra);
+    }
+  }
+}
+
+void loop() {
+    if (read_pin(2,esquerda) == 1){
+      tempo=millis();
+      le_oposto(direita, 1);
+    }
+    else if (read_pin(2,direita) == 1){
+      tempo=millis();
+      le_oposto(esquerda, 0);
+    }
+}
