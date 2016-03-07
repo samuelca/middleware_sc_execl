@@ -37,7 +37,7 @@ void loop()
   // Check if Receiving Data
   while(rfidReader->available()) {
 
-    rfidReader->readBytesUntil(3, receivedTagCode, 15);  
+    rfidReader->readBytesUntil(3, receivedTagCode, 15);
 
     showTag(receivedTagCode);
 

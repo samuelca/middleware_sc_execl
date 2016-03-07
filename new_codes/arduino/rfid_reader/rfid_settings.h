@@ -25,7 +25,7 @@
   const String messageConfiguration[] =
   {
     "UIoT RFID 1.0",
-    "Aguardo",
+    "Waiting",
     "Ola, ",
     "Acesso Liberado!",
     "Acesso Negado!"

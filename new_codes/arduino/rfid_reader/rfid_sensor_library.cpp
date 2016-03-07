@@ -24,10 +24,13 @@ void checkTag(String receivedTag)
   resetLCD();
 
   // Check if Exists TAG Code
-  for(int i = 0; i < sizeof(acceptableRfidCodes) / 2; i++) {
+  for(int i = 0; i < sizeof(acceptableRfidCodes) / sizeof(String); i++) {
 
+    // Remove Fuckin Char
+    String realReceivedTag = receivedTag.substring(1);
+    
     // Found a Match
-    if(receivedTag.indexOf(acceptableRfidCodes[i]) > 0) {
+    if(realReceivedTag.equalsIgnoreCase(acceptableRfidCodes[i])) {
 
       Serial.println("Access Granted!");
 
