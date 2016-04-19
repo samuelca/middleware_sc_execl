@@ -1,8 +1,9 @@
 #include <SoftwareSerial.h>
-float temp, luminosidade;
-int entrou=1;
+float temp;
 #define DEBUG true
-int connectionId=0 ; 
+#define SSID UIoT
+#define SENHA 
+int connectionId=0; 
 SoftwareSerial esp8266(2,3); // make RX Arduino pin 2, make TX Arduino pin 3.
                              
 void setup()
@@ -12,7 +13,7 @@ void setup()
   analogReference(INTERNAL);
   
   sendData("AT+RST\r\n",2000,DEBUG); // reset module
-  sendData("AT+CWJAP=\"TDDQ\",\"1A7699BE11\"\r\n", 2000, DEBUG);
+  sendData("AT+CWJAP=SSID,SENHA\r\n", 2000, DEBUG);
   delay(5000);
   sendData("AT+CWMODE=1\r\n", 1000, DEBUG);
   sendData("AT+CIFSR\r\n",1000,DEBUG); // get ip address
@@ -56,13 +57,12 @@ void setup()
       Serial.print(response);
     }
     
-    return response;
 }
 
 void loop()
 {
-  temp = analogRead(A0) * 0.1;
-  Serial.println(temp);
+     temp = analogRead(A0) * 0.1;
+     Serial.println(temp);
      String webpage = "Temperatura: ";
      webpage += (String)temp;
      String cipSend = "AT+CIPSEND=";
@@ -72,9 +72,7 @@ void loop()
      cipSend +="\r\n";
      sendData(cipSend,1000,DEBUG);
      sendData(webpage,1000,DEBUG);
-      delay(5000);
-
-  
+    delay(5000);
 }
  
  
