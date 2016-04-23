@@ -11,8 +11,7 @@ o jumper responsavel pela alimentação.
 #include <SoftwareSerial.h>
     
 //Define os pinos para a serial   
-SoftwareSerial slave(2, 3); // RX, TX 
-SoftwareSerial master(4,5); 
+SoftwareSerial bluetooth(2, 3); // RX, TX 
 String command = ""; // Stores response of bluetooth device  
             // which simply allows n between each  
             // response.  98d3:31:308382
@@ -23,18 +22,18 @@ void setup()
   //Inicia a serial  
   Serial.begin(115200);  
   Serial.println("Digite os comandos AT :");  
-  slave.begin(38400); 
-  master.begin(38400); 
+  bluetooth.begin(38400); 
+   
 }  
     
 void loop()  
 {  
   // Read device output if available.  
-  if (master.available()) 
+  if (bluetooth.available()) 
   {  
-     while(master.available()) 
+     while(bluetooth.available()) 
      { // While there is more to be read, keep reading.  
-       command += (char)master.read();  
+       command += (char)bluetooth.read();  
        delay(10);
      }  
    Serial.println(command);  
@@ -45,6 +44,6 @@ void loop()
   if (Serial.available())
   {  
     delay(10); // The DELAY!  
-    master.write(Serial.read());  
+    bluetooth.write(Serial.read());  
   }  
 }
