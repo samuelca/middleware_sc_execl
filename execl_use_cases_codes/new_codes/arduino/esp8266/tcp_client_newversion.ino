@@ -1,5 +1,6 @@
 #include <SoftwareSerial.h>
 #include "esp_connection.h"
+#include "esp_data.h"
 
 #define SSID UIoT
 #define PSWD dgKYfPFi
@@ -63,64 +64,9 @@ void reset(const int timeout)
   sendCommand("AT+RST\r\n",timeout); 
 }
 
-void find_network(String ssid, String psw, const int timeout)
-{
-  sendCommand("AT+CWJAP=ssid,psw\r\n", timeout);
-}
-
-void set_mode(int mode, const int timeout)
-{
-  sendCommand("AT+CWMODE=mode\r\n", timeout);
-}
-
-void get_ip(const int timeout)
-{
-  sendCommand("AT+CIFSR\r\n",timeout);
-}
-
-void set_multiple_connection(bool mult, const int timeout)
-{
-  sendCommand("AT+CIPMUX=mult\r\n",timeout);
-}
-
-void create_connection(String cipstart, const int timeout, int connectionId)
-{
-     cipstart = "AT+CIPSTART=";
-     cipstart += connectionId;
-     cipstart += ",";
-     cipstart += "\"TCP\"";
-     cipstart += ",";
-     cipstart += "\"192.168.1.112\"";
-     cipstart += ",";
-     cipstart += 8000;
-     cipstart +="\r\n";
-    sendCommand(cipstart,timeout);
-}
-
 void wait(const int timeout)
 {
   delay(timeout);
 }
 
-void data_warning(String cipSend, String data,const int timeout, int connectionId)
-{
-     cipSend = "AT+CIPSEND=";
-     cipSend += connectionId;
-     cipSend += ",";
-     cipSend +=data.length();
-     cipSend +="\r\n";
-     sendCommand(cipSend,timeout);
-}
 
-void send_data(String data, const int timeout)
-{
-  sendCommand(data,timeout);
-}
-
-void close_connection(String closeConnection, const int timeout, int connectionId)
-{
-  closeConnection = "AT+CIPCLOSE="; 
-  closeConnection+=connectionId; // append connection id
-  closeConnection+="\r\n";
-  sendData(closeConnection,timeout);
-}
