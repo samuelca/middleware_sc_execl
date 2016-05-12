@@ -1,14 +1,28 @@
-void Data::data_warning(String cipSend, String data,const int timeout, int connectionId)
+#include "data.h"
+
+
+
+void Data::data_warning(const int timeout, int connectionId)
 {
-     cipSend = "AT+CIPSEND=";
+     
+     String cipSend = "AT+CIPSEND=";
      cipSend += connectionId;
      cipSend += ",";
-     cipSend +=data.length();
+     cipSend +=data_value.length();
      cipSend +="\r\n";
      sendCommand(cipSend,timeout);
 }
 
-void Data::send_data(String data, const int timeout)
+void Data::send_data(const int timeout)
 {
-  sendCommand(data,timeout);
+  sendCommand(data_value,timeout);
 }
+
+String Data::get_data(){
+  return data_value;
+}
+
+void Data::set_data(String data){
+  data_value = data
+}
+
