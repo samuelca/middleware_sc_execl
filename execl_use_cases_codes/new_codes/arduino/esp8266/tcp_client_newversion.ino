@@ -1,46 +1,35 @@
-#include <SoftwareSerial.h>
-#include "esp_connection.h"
-#include "esp_data.h"
-#include "AT.h"
+#include "connection.h"
+#include "data.h"
+//#include "AT.h"
+//#include "settings.h"
 
-#define SSID UIoT
-#define PSWD dgKYfPFi
-#define DEBUG true
-int connectionId=0 ;
+#define SSID dlink-9FC8
+#define PSWD xpqap4952
+const char *serverIP = "192.16.9.70"
+#define porta 8000
 
-SoftwareSerial esp8266(2,3); // make RX Arduino pin 2, make TX Arduino pin 3.
+Connection * esp_client = new Connection(SSID, PSWD, 0, 1, TCP, serverIP, porta);
+Data * dado = new Data();
 
 void setup()
 {
   Serial.begin(9600);
-  esp8266.begin(115200); // your esp's baud rate might be different
-  analogReference(INTERNAL);
-
-  reset(2000);
-  find_network(SSID, PSWD, 2000);
-  wait(5000);
-  set_mode(1,2000);
-  get_ip(1000);
-  set_multiple_connection(1, 1000);
-  create_connection(cipstart, 1000, 0);
+  esp_client->get_connection();
+  Serial.print(esp_client->get_ip());
 
 }
 
 
 void loop()
 {
-     String cipSend;
      String data = "Codigo RFID: ";
-     data += (String)temp;
-     data_warning(cipSend, data, 1000, 0);
-     send_data(data, 1000);
-     delay(5000);
+     dado->set_data(data);
+     dado->data_warning(1000, esp_client->get_connectionId());
+     dado->send_data(1000);
+     wait(5000);
 }
 
-void reset(const int timeout)
-{
-  sendCommand("AT+RST\r\n",timeout);
-}
+
 
 void wait(const int timeout)
 {
