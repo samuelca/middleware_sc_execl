@@ -3,10 +3,9 @@
 
 
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-byte ip[] = { 192, 168, 1, 102 };
-byte server[] = { 192, 168, 1, 109 };
+byte ip[] = { 192, 168, 1, 102 }; // ip do arduino
+byte server[] = { 192, 168, 1, 109 };// ip do servidor
 char dado[] = "123"; //dado a enviar para servidor
-//int tamanho_dado = dado.length();
 EthernetClient client;
 
 void setup()
