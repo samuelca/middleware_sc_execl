@@ -1,35 +1,45 @@
-#include "connection.h"
-#include "data.h"
-//#include "AT.h"
-//#include "settings.h"
-
-#define SSID dlink-9FC8
-#define PSWD xpqap4952
-const char *serverIP = "192.16.9.70"
-#define porta 8000
-
-Connection * esp_client = new Connection(SSID, PSWD, 0, 1, TCP, serverIP, porta);
-Data * dado = new Data();
+#include "settings.h"
 
 void setup()
 {
   Serial.begin(9600);
+  
+  //principal função da classe de conexão. Responsável por conectar o dispositivo na rede e configurá-lo
   esp_client->get_connection();
-  Serial.print(esp_client->get_ip());
-
+  
 }
 
 
 void loop()
 {
+  /*toda vez que for enviar dados, criar conexão e depois fechá-la. Se quiser, pode abrir apenas 
+  uma vez no SETUP e não fechar
+  */
+     esp_client->create_connection(2000);
+     String jsonstring;
      String data = "Codigo RFID: ";
-     dado->set_data(data);
-     dado->data_warning(1000, esp_client->get_connectionId());
-     dado->send_data(1000);
-     wait(5000);
+     String nome = "Bruno";
+     String URL = "/raise/services/rfidcode=" + data + "&name=" + nome + "\r\n";
+
+     //envio de dados - http
+     dado->create_http(URL, "GET", serverip);
+     dado->data_warning(3000, esp_client->get_connectionId());
+     dado->send_data(3000);
+          
+     //resposta do servidor no formato json
+     jsonstring = dado->get_jsonstring();
+     Serial.println(jsonstring);
+     /*
+     // se houver conteudo json, chamar funcao para interpretar a mensagem (funcao parseJson)
+     if (jsonstring != ""){
+        char jsonChar[jsonstring.length()];
+        jsonstring.toCharArray(jsonChar, jsonstring.length() + 1);
+        Serial.println(dado->parseJson(jsonChar));
+     }
+     */
+     esp_client->close_connection(2000);
+     wait(10000);
 }
-
-
 
 void wait(const int timeout)
 {
