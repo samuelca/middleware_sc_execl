@@ -1,11 +1,11 @@
 #include "AT.h"
 
-
-void AT::initialize_serial(){
-  esp8266->begin(115200);
+void initialize_serial()
+{
+  esp8266->begin(19200);
 }
 
-String AT::sendCommand(String command, const int timeout)
+String sendCommand(String command, const int timeout)
 {
    String response = "";
    esp8266->print(command);
@@ -16,10 +16,9 @@ String AT::sendCommand(String command, const int timeout)
    {
      while(esp8266->available())
      {
-       
-       char c = esp8266->read();
-       response+=c;
-       
+         char c = esp8266->read();
+         response+=c;
+      
      }
    }
    
@@ -27,20 +26,17 @@ String AT::sendCommand(String command, const int timeout)
    return response;
 }
 
-char* AT::connected_client(int *tam){
-  char aux[] = "-1";
+String client_available()
+{
+  String aux = "-1";
   if (esp8266->available()){
        if (esp8266->find("+IPD,")){
-          int i=0;
-          while (esp8266->available()){
-            aux[i] = esp8266->read();
-            i++;
-         }
-         *tam = i;
-         return aux;
+          aux = "";
+          aux = esp8266->readString();
+          return aux;
        }
        else{
-         return aux;
+          return aux;
        }
        
   }
@@ -48,5 +44,3 @@ char* AT::connected_client(int *tam){
     return aux;
   }
 }
-
-
