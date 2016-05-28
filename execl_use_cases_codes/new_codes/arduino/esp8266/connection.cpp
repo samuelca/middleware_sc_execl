@@ -1,7 +1,6 @@
 #include "connection.h"
 
-
-
+  
 String Connection::get_ip(){
   return this->Ipadress;
 }
@@ -11,37 +10,38 @@ int Connection::get_connectionId(){
 }
 
 
-void Connection::set_connectionId(int valor){
-  connectionId = valor;
-}
-
 void Connection::reset(const int timeout){
-  
-  sendCommand("AT+RST\r\n",timeout);
+   sendCommand("AT+RST\r\n",timeout);
 }
 
   
-int Connection::get_connection(){
+int Connection::get_connection()
+{
+  initialize_serial();
   this->reset(3000);
+  this->set_mode(2000);
+  delay(1000);
   this->find_network(2000);
   delay(5000);
-  this->set_mode(2000);
   this->get_ip(1000);
+  delay(1000);
   this->set_multiple_connection(1000);
-  this->create_connection(1000);
-    
+  delay(2000);
 }
-
 
 void Connection::find_network(const int timeout)
 {
-  sendCommand("AT+CWJAP=SSID,PSWD\r\n", timeout);
-
+  String rede = "AT+CWJAP=\"" + this->SSID + "\",\"" + this->PSWD + "\"\r\n";
+  sendCommand(rede, timeout);
 }
 
 void Connection::set_mode(const int timeout)
 {
-  sendCommand("AT+CWMODE=Modo\r\n", timeout);
+
+  String modo = "AT+CWMODE=";
+  modo += this->Modo;
+  modo += "\r\n";
+  sendCommand(modo, timeout);
 
 }
 void Connection::get_ip(const int timeout)
@@ -51,34 +51,28 @@ void Connection::get_ip(const int timeout)
 
 void Connection::set_multiple_connection(const int timeout)
 {
-  sendCommand("AT+CIPMUX=Multipleconnection\r\n",timeout);
+  String mux = "AT+CIPMUX=";
+  mux += Multipleconnection;
+  mux += "\r\n"; 
+  sendCommand(mux,timeout);
  
 }
 
-void Connection::create_connection(const int timeout)
-{
-     if(Protocolo == "SERVER"){
-        sendCommand("AT+CIPSERVER=1,porta\r\n",timeout);
-     }
-     else{
-       String cipstart = "AT+CIPSTART=";
-       cipstart += connectionId;
-       cipstart += ",";
-       cipstart += "\"Protocolo\"";
-       cipstart += ",";
-       cipstart += "\"serverip\"";
-       cipstart += ",";
-       cipstart += porta;
-       cipstart +="\r\n";
-       sendCommand(cipstart,timeout);
-  }  
+
+
+void Connection::change_baud(int baud,const int timeout){
+  String rate = "AT+CIOBAUD=";
+  rate += baud;
+  rate += "\r\n";
+  sendCommand(rate,timeout);
 }
 
 
 void Connection::close_connection(const int timeout)
 {
   String closeConnection = "AT+CIPCLOSE=";
-  closeConnection+=connectionId; // append connection id
+  closeConnection+=connectionId; 
   closeConnection+="\r\n";
   sendCommand(closeConnection,timeout);
 }
+
