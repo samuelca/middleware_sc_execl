@@ -24,7 +24,7 @@ int Connection::get_connection()
   this->find_network(2000);
   delay(5000);
   this->get_ip(1000);
-  delay(1000);
+  delay(2000);
   this->set_multiple_connection(1000);
   delay(2000);
 }
@@ -58,8 +58,6 @@ void Connection::set_multiple_connection(const int timeout)
  
 }
 
-
-
 void Connection::change_baud(int baud,const int timeout){
   String rate = "AT+CIOBAUD=";
   rate += baud;
@@ -75,4 +73,5 @@ void Connection::close_connection(const int timeout)
   closeConnection+="\r\n";
   sendCommand(closeConnection,timeout);
 }
+
 

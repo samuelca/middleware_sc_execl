@@ -7,23 +7,15 @@ void initialize_serial()
 
 String sendCommand(String command, const int timeout)
 {
+  
    String response = "";
    esp8266->print(command);
+   esp8266->setTimeout(timeout);
+   response = esp8266->readString();
 
-   long int time = millis();
-
-   while( (time+timeout) > millis())
-   {
-     while(esp8266->available())
-     {
-         char c = esp8266->read();
-         response+=c;
-      
-     }
-   }
-   
    Serial.print(response);
    return response;
+   
 }
 
 String client_available()
@@ -44,3 +36,4 @@ String client_available()
     return aux;
   }
 }
+
