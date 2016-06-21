@@ -5,13 +5,16 @@
 int identificationPhase = 0;
 
 // Environment Configuration
-void setup() 
-{
-  // LED Blink Output
-  pinMode(pinPositions[3], OUTPUT);
-  
+void setup()
+{  
   // Start Serial listener
   Serial.begin(receiveBaudRate);
+
+  // Relé
+  pinMode(pinPositions[2], OUTPUT);
+
+  // Ativa Relé
+  digitalWrite(pinPositions[2], HIGH);
 
   // Configure LCD
   lcd->begin(lcdConfiguration[0], lcdConfiguration[1]); 
@@ -26,9 +29,6 @@ void setup()
 // Main Loop
 void loop() 
 {
-  // Tag Code (Need be 15 Characters)
-  char receivedTagCode[14];
-
   if(!rfidReader->available()) {   
     // Print Pointers
     identificationPhase = showInitialMessage(messageConfiguration[0], messageConfiguration[1], identificationPhase);
@@ -36,16 +36,19 @@ void loop()
 
   // Check if Receiving Data
   while(rfidReader->available()) {
-
-    rfidReader->readBytesUntil(3, receivedTagCode, 15);
-
-    showTag(receivedTagCode);
+    
+    showTag(rfidReader->readString());
 
     identificationPhase = 0;
   }
 
-  // Reset Buffer from Tag Code
-  memset(receivedTagCode, 0, sizeof(receivedTagCode));
+  if(digitalRead(pinPositions[2]) == LOW) {
+    // Delay De Porta
+    delay(openPortaInterval);
+
+    // Ativa Relé
+    digitalWrite(pinPositions[2], HIGH);
+  }
 
   if(!rfidReader->available()) {   
     // Sub Message Delay

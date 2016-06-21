@@ -2,16 +2,13 @@
 #include "rfid_manipulation_library.h"
 
 // Show Tag
-void showTag(char* receivedTag)
+void showTag(String receivedTag)
 { 
-  // Convert to String
-  String finalTagCode = receivedTag;
-
   // Show TAG Number
-  Serial.println("Tag Number: " + finalTagCode);
+  Serial.println("Tag Number: " + receivedTag.substring(1, 13));
 
   // Check Tag Validate
-  checkTag(finalTagCode);
+  checkTag(receivedTag.substring(1, 13));
 
   // Flush Data
   flushData();
@@ -25,14 +22,14 @@ void checkTag(String receivedTag)
 
   // Check if Exists TAG Code
   for(int i = 0; i < sizeof(acceptableRfidCodes) / sizeof(String); i++) {
-
-    // Remove Fuckin Char
-    String realReceivedTag = receivedTag.substring(1);
     
     // Found a Match
-    if(realReceivedTag.equalsIgnoreCase(acceptableRfidCodes[i])) {
+    if(receivedTag.equalsIgnoreCase(acceptableRfidCodes[i])) {
 
       Serial.println("Access Granted!");
+
+      // Relé
+      digitalWrite(pinPositions[2], LOW);
 
       // Show Welcome Message
       showWelcomeMessage(codeNames[i], true);
@@ -108,17 +105,5 @@ int showInitialMessage(String firstLine, String secondLine, int idPhase)
 
   // Return ID Loop
   return identificationLoop(idPhase);
-}
-
-// Blink Awesome LED
-void ledBlinkInterval()
-{
-  if(digitalRead(pinPositions[3]) == LOW) {
-    // Write Turn On LED
-    digitalWrite(pinPositions[3], HIGH);
-  } else {
-    // Write Turn Off LED
-    digitalWrite(pinPositions[3], LOW);
-  }
 }
 

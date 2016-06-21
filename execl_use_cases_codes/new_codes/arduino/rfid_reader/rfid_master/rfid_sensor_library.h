@@ -4,7 +4,7 @@
 #include "rfid_codes.h"
 #include "rfid_settings.h"
   
-  void showTag(char* receivedTag);
+  void showTag(String receivedTag);
   
   void checkTag(String receivedTag);
   

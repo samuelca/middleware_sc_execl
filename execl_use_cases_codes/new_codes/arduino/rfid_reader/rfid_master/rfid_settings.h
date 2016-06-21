@@ -11,6 +11,9 @@
   
   // LED Blink Interval
   #define ledBlinkTime 1000
+
+  // Delay do Relé Trancar
+  #define openPortaInterval 4000
   
   // LCD Change Delay Time
   #define messageShowInterval 2000
@@ -43,7 +46,7 @@
   {
     2, // First Digital Pin
     3, // Second Digital Pin
-    13 // Internal LED
+    13 // Relé
   };
 
   // LiquidCrystal Serial
