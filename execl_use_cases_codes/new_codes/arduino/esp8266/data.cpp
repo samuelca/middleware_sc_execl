@@ -41,7 +41,7 @@ bool Data::update(String metodo, int connectionId) {
   String resposta;
   long code;
 
-  //update_url();
+  update_url();
   create_http(metodo);
   data_warning(2000, connectionId);
   jsonflag = send_data(3000);
@@ -70,7 +70,7 @@ void Data::service(String metodo, int connectionId) {
   long code = 403;
 
   while (code != 200) {
-    //service_url();
+    service_url();
     create_http(metodo);
     data_warning(2000, connectionId);
     jsonflag = send_data(3000);
@@ -87,11 +87,11 @@ void Data::service(String metodo, int connectionId) {
       if (code == 200) {
         resposta = parseJson("\"id_serv\": ", 'n');
         Serial.println(resposta);
-        id_serv = resposta.toInt();
+        this->id_serv = resposta.toInt();
 
         resposta = parseJson("\"timing\": ", 'n');
         Serial.println(resposta);
-        timing = resposta.toInt();
+        this->timing = resposta.toInt();
       }
     }
   }
@@ -105,7 +105,7 @@ void Data::authenticate(String metodo, int connectionId) {
   while (code != 200) {
 
     //fase de autenticacao
-    //authentication_url();
+    authentication_url();
     create_http(metodo);
     data_warning(2000, connectionId);
     jsonflag = send_data(3000);
@@ -122,7 +122,7 @@ void Data::authenticate(String metodo, int connectionId) {
       if (code == 200) {
         resposta = parseJson("\"id_token\": ", 'n');
         Serial.println(resposta);
-        id_token = resposta.toInt();
+        this->id_token = resposta.toInt();
       }
     }
   }
