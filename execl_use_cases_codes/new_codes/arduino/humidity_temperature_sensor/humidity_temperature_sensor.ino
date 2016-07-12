@@ -15,10 +15,10 @@ void setup()
 void loop()
 {
   DHT.read11(dht_dpin); //Read information from the sensor
-  Serial.print("Umidade = ");
+  Serial.print("Humidity = ");
   Serial.print(DHT.humidity);
-  Serial.print(" %  "); //space
-  Serial.print("Temperatura = ");
+  Serial.print(" % "); //space
+  Serial.print("| Temperature = ");
   Serial.print(DHT.temperature); 
   Serial.println(" Celsius  ");
 
